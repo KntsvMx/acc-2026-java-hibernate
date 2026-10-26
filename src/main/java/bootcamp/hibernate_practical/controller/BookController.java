@@ -68,4 +68,13 @@ public class BookController {
         return bookService.findBookByPartTitle(title);
     }
 
+    @PutMapping("/{id}/borrow")
+    public BookResponse borrowBook(@PathVariable Long id) {
+        return bookService.borrowBook(id);
+    }
+
+    @PutMapping("/{id}/return")
+    public BookResponse returnBook(@PathVariable Long id) {
+        return bookService.returnBook(id);
+    }
 }

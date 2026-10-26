@@ -16,4 +16,6 @@ public class UpdateBookRequest {
     private int publicationYear;
     @NotNull(message = "Availability should be set either True or False")
     public boolean available;
+    @NotNull(message = "Borrowed status should be set either True or False")
+    public boolean borrowedStatus;
 }

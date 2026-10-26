@@ -14,4 +14,5 @@ public class BookResponse {
     public String genre;
     public int publicationYear;
     public boolean available;
+    public boolean borrowedStatus;
 }

@@ -5,6 +5,7 @@ import bootcamp.hibernate_practical.dto.CreateBookRequest;
 import bootcamp.hibernate_practical.dto.UpdateBookRequest;
 import bootcamp.hibernate_practical.entity.Book;
 import bootcamp.hibernate_practical.exception.BookNotFoundByIdException;
+import bootcamp.hibernate_practical.exception.InvalidBookStatusException;
 import bootcamp.hibernate_practical.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
@@ -45,7 +46,12 @@ public class BookService {
         book.setAuthor(request.getAuthor());
         book.setGenre(request.getGenre());
         book.setPublicationYear(request.getPublicationYear());
+
+        if (request.isAvailable() == request.isBorrowedStatus()) {
+            throw new InvalidBookStatusException("Book can't be available while borrowed");
+        }
         book.setAvailable(request.isAvailable());
+        book.setBorrowedStatus(request.isBorrowedStatus());
 
         bookRepository.save(book);
 
@@ -76,6 +82,21 @@ public class BookService {
         return bookRepository.findBooksByTitleContaining(title).stream().map(this::mapToResponse).toList();
     }
 
+    public BookResponse borrowBook(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundByIdException(id));
+        book.setBorrowedStatus(true);
+        book.setAvailable(false);
+        bookRepository.save(book);
+        return mapToResponse(book);
+    }
+
+    public BookResponse returnBook(Long id) {
+        Book book = bookRepository.findById(id).orElseThrow(() -> new BookNotFoundByIdException(id));
+        book.setBorrowedStatus(false);
+        book.setAvailable(true);
+        bookRepository.save(book);
+        return mapToResponse(book);
+    }
     private BookResponse mapToResponse(Book book) {
         return BookResponse.builder()
                 .id(book.getId())
@@ -84,6 +105,8 @@ public class BookService {
                 .genre(book.getGenre())
                 .publicationYear(book.getPublicationYear())
                 .available(book.isAvailable())
+                .borrowedStatus(book.isBorrowedStatus())
                 .build();
     }
+
 }
