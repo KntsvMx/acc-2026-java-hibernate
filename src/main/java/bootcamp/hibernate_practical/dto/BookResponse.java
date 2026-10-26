@@ -1,11 +1,12 @@
 package bootcamp.hibernate_practical.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Builder;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
+@Builder
 public class BookResponse {
     public Long id;
     public String title;
