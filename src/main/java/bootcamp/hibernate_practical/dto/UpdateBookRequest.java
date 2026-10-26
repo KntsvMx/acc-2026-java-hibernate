@@ -11,7 +11,6 @@ public class UpdateBookRequest {
     private String title;
     @NotBlank(message = "Author mustn't be empty or blank")
     private String author;
-    @NotBlank(message = "Genre mustn't be empty or blank")
     private String genre;
     @Positive
     private int publicationYear;

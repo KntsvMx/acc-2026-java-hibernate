@@ -10,7 +10,6 @@ public class CreateBookRequest {
     private String title;
     @NotBlank(message = "Author shouldn't be empty nor null")
     private String author;
-    @NotBlank(message = "Genre shouldn't be empty nor null")
     private String genre;
     @Positive
     private int publicationYear;
