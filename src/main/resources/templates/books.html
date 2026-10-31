@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Library books</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 24px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        th { background: #eee; }
+        .book-list { overflow-x: auto; margin-top: 20px; }
+        label { display: block; margin-top: 10px; }
+        input { padding: 5px; }
+        button { margin-top: 10px; padding: 5px 12px; }
+        .errors { color: #b00020; }
+    </style>
+</head>
+<body>
+<h1>Library books</h1>
+<p>Signed in as <strong th:text="${username}">user</strong></p>
+
+<form th:action="@{/logout}" method="post">
+    <button type="submit">Log out</button>
+</form>
+
+<div class="book-list">
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Genre</th>
+            <th>Year</th>
+            <th>Available</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.id}"></td>
+            <td th:text="${book.title}"></td>
+            <td th:text="${book.author}"></td>
+            <td th:text="${book.genre}"></td>
+            <td th:text="${book.publicationYear}"></td>
+            <td th:text="${book.available ? 'Yes' : 'No'}"></td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(books)}">
+            <td colspan="6">No books yet.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<section th:if="${isAdmin}">
+    <h2>Add book</h2>
+    <form th:action="@{/books}" th:object="${bookForm}" method="post">
+        <ul class="errors" th:if="${#fields.hasErrors('*')}">
+            <li th:each="error : ${#fields.errors('*')}" th:text="${error}"></li>
+        </ul>
+
+        <label for="title">Title</label>
+        <input type="text" th:field="*{title}" required>
+
+        <label for="author">Author</label>
+        <input type="text" th:field="*{author}" required>
+
+        <label for="genre">Genre (optional)</label>
+        <input type="text" th:field="*{genre}">
+
+        <label for="publicationYear">Publication year</label>
+        <input type="number" th:field="*{publicationYear}" min="1" required>
+
+        <div><button type="submit">Add book</button></div>
+    </form>
+</section>
+
+<p th:unless="${isAdmin}">Only admins can add books.</p>
+</body>
+</html>
