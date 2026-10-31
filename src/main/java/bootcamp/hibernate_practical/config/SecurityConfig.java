@@ -25,7 +25,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.PUT, "/api/books/{id}/borrow").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/books/{id}/return").hasRole("ADMIN")
                         .anyRequest().hasRole("ADMIN"))
-                .formLogin(form -> form.defaultSuccessUrl("/api/books", true))
+                .formLogin(form -> form.defaultSuccessUrl("/books", true))
                 .httpBasic(Customizer.withDefaults());
 
         return http.build();
